@@ -1,3 +1,4 @@
+import json
 from time import time
 from traceback import print_stack
 import rclpy
@@ -5,13 +6,12 @@ from rclpy.node import Node
 
 from std_msgs.msg import String
 
-from .util import parse_topic_and_type
+from .util import parse_topic_and_type, post_to_content
 
 
-class Collector(Node):
-
+class Sender(Node):
     def __init__(self):
-        super().__init__('Collector')
+        super().__init__('sender')
         topic_and_types = parse_topic_and_type(self.get_topic_names_and_types())
         subscriptions = []
         for topic, msg_types in topic_and_types.items():
@@ -32,20 +32,22 @@ class Collector(Node):
         print(subscriptions)
 
     def listener_callback(self, msg):
-        self.get_logger().info(f"I heard : {msg}.")
+        body = {"topic": str(msg)}
+
+        resp = post_to_content(json.dumps(body))
 
 
 def main(args=None):
     rclpy.init(args=args)
 
-    collector = Collector()
+    sender = Sender()
 
-    rclpy.spin(collector)
+    rclpy.spin(sender)
 
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)
-    collector.destroy_node()
+    sender.destroy_node()
     rclpy.shutdown()
 
 

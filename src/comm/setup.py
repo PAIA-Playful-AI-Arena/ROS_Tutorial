@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'collector = comm.collector:main'
+            'collector = comm.collector:main',
+            'sender = comm.sender:main'
         ],
     },
 )
