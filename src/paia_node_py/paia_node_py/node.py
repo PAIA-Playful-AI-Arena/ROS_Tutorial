@@ -74,6 +74,8 @@ class SimpleClientNode(Node):
                         f'receive response: {response.message} ')
 
     def send_request(self):
+        # check client
+        # return response 
         self.prepare_request()
         while rclpy.ok():
             rclpy.spin_once(self)
