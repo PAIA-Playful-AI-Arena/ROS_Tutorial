@@ -18,7 +18,7 @@ class CountPublisher(SimplePublishNode):
 def main(args=None):
     rclpy.init(args=args)
 
-    publisher = CountPublisher(topic="paia_pub")
+    publisher = CountPublisher(topic="paia")
 
     rclpy.spin(publisher)
 

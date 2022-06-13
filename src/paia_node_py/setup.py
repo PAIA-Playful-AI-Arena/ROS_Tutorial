@@ -20,7 +20,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'publish = paia_node_py.publish:main'
+            'publish = paia_node_py.publish:main',
+            'subscribe = paia_node_py.subscribe:main',
         ],
     },
 )
