@@ -22,6 +22,8 @@ setup(
         'console_scripts': [
             'publish = paia_node_py.publish:main',
             'subscribe = paia_node_py.subscribe:main',
+            'service = paia_node_py.service:main',
+            'client = paia_node_py.client:main',
         ],
     },
 )
