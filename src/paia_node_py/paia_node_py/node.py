@@ -27,7 +27,7 @@ class SimplePublishNode(Node):
 class SimpleSubscribeNode(Node):
 
     def __init__(self, topic: str, MSG_TYPE=String, timer_period: float = 1.0):
-        super().__init__('SimplePublishNode')
+        super().__init__('SimpleSubscribeNode')
 
         self.subscription = self.create_subscription(
             MSG_TYPE,
@@ -41,7 +41,6 @@ class SimpleSubscribeNode(Node):
         self.get_logger().info('I heard: "%s"' % msg.data)
 
 class SimpleServiceNode(Node):
-
     def __init__(self,service_name:str,SRV_TYPE=SetBool):
         super().__init__('SimpleServiceNode')
         self.srv = self.create_service(SRV_TYPE, service_name, self.get_response)
@@ -58,34 +57,29 @@ class SimpleClientNode(Node):
 
     def __init__(self,service_name:str,SRV_TYPE=SetBool):
         super().__init__('SimpleClientNode')
-        self.cli = self.create_client(SRV_TYPE, service_name)
-        while not self.cli.wait_for_service(timeout_sec=1.0):
+        self._cli = self.create_client(SRV_TYPE, service_name)
+        self.get_logger().info('Client start...')
+
+        while not self._cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
         self.req = SRV_TYPE.Request()
-        self.trig = False
+        self.resp=SRV_TYPE.Response()
 
-    def prepare_request(self):
-        self.req.data = self.trig
-        self.trig = not self.trig
-        self.future = self.cli.call_async(self.req)
-        # TODO think more
-    def handle_response(self,response):
-        self.get_logger().info(
-                        f'receive response: {response.message} ')
-
-    def send_request(self):
+    
+    def send_request_and_get_resp(self,request):
         # check client
         # return response 
-        self.prepare_request()
+        self.req = request
+        self.get_logger().info(f'Send request : {self.req}')
+        self.future = self._cli.call_async(self.req)
         while rclpy.ok():
             rclpy.spin_once(self)
             if self.future.done():
                 try:
-                    response = self.future.result()
+                    self.resp = self.future.result()
                 except Exception as e:
                     self.get_logger().info(
                         'Service call failed %r' % (e,))
-                else:
-                    self.handle_response(response)
-                # self.prepare_request()
                 break
+        self.get_logger().info(f'Get response : {self.resp}')
+        return self.resp
