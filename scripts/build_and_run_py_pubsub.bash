@@ -1,5 +1,5 @@
-export PKG_NAME=py_pubsub
-export NODE_NAME=py_talker
+export PKG_NAME=PAIA_NODE_PY 
+export NODE_NAME=BasicPublishNode
 # !!!! should be at workspace root !!!!
 colcon build --packages-select $PKG_NAME
 . install/setup.bash
