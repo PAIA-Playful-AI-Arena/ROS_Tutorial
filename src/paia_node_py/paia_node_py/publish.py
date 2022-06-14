@@ -2,11 +2,11 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from .node import SimplePublishNode
-
+from .config import publisher_setting
 
 class CountPublisher(SimplePublishNode):
-    def __init__(self, topic: str):
-        super().__init__(topic=topic,MSG_TYPE=String,timer_period=1)
+    def __init__(self):
+        super().__init__(topic=publisher_setting.topic_name,MSG_TYPE=String,timer_period=publisher_setting.time_period)
         self.i =0
     def prepare_msg(self):
         msg = String()
@@ -18,7 +18,7 @@ class CountPublisher(SimplePublishNode):
 def main(args=None):
     rclpy.init(args=args)
 
-    publisher = CountPublisher(topic="paia")
+    publisher = CountPublisher()
 
     rclpy.spin(publisher)
 

@@ -2,11 +2,12 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from .node import SimpleSubscribeNode
+from .config import subscriber_setting
 
 
 class Subscriber(SimpleSubscribeNode):
-    def __init__(self, topic: str):
-        super().__init__(topic=topic,MSG_TYPE=String)
+    def __init__(self):
+        super().__init__(topic=subscriber_setting.topic_name,MSG_TYPE=String)
         self.i =0
 
     def handle_msg(self,msg):
@@ -17,7 +18,7 @@ class Subscriber(SimpleSubscribeNode):
 def main(args=None):
     # print("hello subscribe")
     rclpy.init(args=args)
-    subscriber = Subscriber(topic="paia")
+    subscriber = Subscriber()
 
     rclpy.spin(subscriber)
 

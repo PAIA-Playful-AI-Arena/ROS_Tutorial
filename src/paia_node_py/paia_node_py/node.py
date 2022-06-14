@@ -9,7 +9,7 @@ import rclpy
 class SimplePublishNode(Node):
 
     def __init__(self, topic: str, MSG_TYPE=String, timer_period: float = 1.0):
-        super().__init__('SimplePublishNode')
+        super().__init__(f'{topic}_publisher_node')
         self._publisher = self.create_publisher(MSG_TYPE, topic, 10)
         self._timer = self.create_timer(timer_period, self.__timer_callback)
 
@@ -27,7 +27,7 @@ class SimplePublishNode(Node):
 class SimpleSubscribeNode(Node):
 
     def __init__(self, topic: str, MSG_TYPE=String, timer_period: float = 1.0):
-        super().__init__('SimpleSubscribeNode')
+        super().__init__(f'{topic}_subscriber_node')
 
         self.subscription = self.create_subscription(
             MSG_TYPE,
@@ -42,7 +42,7 @@ class SimpleSubscribeNode(Node):
 
 class SimpleServiceNode(Node):
     def __init__(self,service_name:str,SRV_TYPE=SetBool):
-        super().__init__('SimpleServiceNode')
+        super().__init__(f'{service_name}_service_node')
         self.srv = self.create_service(SRV_TYPE, service_name, self.get_response)
 
     @abc.abstractmethod
@@ -56,9 +56,9 @@ class SimpleServiceNode(Node):
 class SimpleClientNode(Node):
 
     def __init__(self,service_name:str,SRV_TYPE=SetBool):
-        super().__init__('SimpleClientNode')
+        super().__init__(f'{service_name}_client_node')
         self._cli = self.create_client(SRV_TYPE, service_name)
-        self.get_logger().info('Client start...')
+        self.get_logger().info(f'{service_name}_client_node start...')
 
         while not self._cli.wait_for_service(timeout_sec=1.0):
             self.get_logger().info('service not available, waiting again...')
