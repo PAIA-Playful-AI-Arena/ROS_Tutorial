@@ -14,7 +14,7 @@ setup(
     install_requires=[
         'setuptools',
         'pydantic',
-        'pydantic[dotenv]'
+        'python-dotenv'
     ],
     zip_safe=True,
     maintainer='Kylin',
