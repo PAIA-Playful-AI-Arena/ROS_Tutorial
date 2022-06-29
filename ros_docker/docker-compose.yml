@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+
+  talker:
+    image: osrf/ros:foxy-desktop
+    command: ros2 run demo_nodes_cpp talker
+    networks:
+      - net
+  listener:
+    image: osrf/ros:foxy-desktop
+    command: ros2 run demo_nodes_cpp listener
+    networks:
+      - net
+    depends_on:
+      - talker
+    
+networks:
+  net:
+    driver: bridge 
